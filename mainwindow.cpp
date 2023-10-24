@@ -32,7 +32,6 @@ void MainWindow::showReply(QNetworkReply *r)
         return;
     }
     QString answer = r->readAll();
-    //ui->textBrowser->append(answer);
 
     QJsonDocument jsonResponse = QJsonDocument::fromJson(answer.toUtf8());
     QJsonObject jsonObject = jsonResponse.object();
@@ -44,11 +43,15 @@ void MainWindow::showReply(QNetworkReply *r)
     int hour = now / 3600 % 24 + 3;
     int minute = now / 60 % 60;
 
-    if (hour > 23) {
+    QTime time;
+
+    if (hour > 21) {
         hour = hour - 24;
     }
 
-    ui->textBrowser->append("Now - " + QString::number(hour) + ":" + QString::number(minute));
+    time.setHMS(hour, minute, 0);
+
+    ui->textBrowser->append("Now - " + time.toString("hh:mm").toUtf8());
     ui->textBrowser->append("Temperature: " + QString::number(temperature) + " °C");
 }
 
